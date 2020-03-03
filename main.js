@@ -15,12 +15,18 @@ function random(min, max) {
 
 // define Ball constructor
 
-function Shape(x, y, velX, velY, exists) {
-    this.x = x;
-    this.y = y;
-    this.velX = velX;
-    this.velY = velY;
-    this.exists = exists;
+class Shape {
+    constructor(x, y, velX, velY, exists) {
+        this.x = x;
+        this.y = y;
+        this.velX = velX;
+        this.velY = velY;
+        this.exists = exists;
+    }
+}
+
+class Ball extends Shape {
+    
 }
 
 function Ball(x, y, velX, velY, exists, size, color) {
