@@ -26,161 +26,142 @@ class Shape {
 }
 
 class Ball extends Shape {
-    
-}
-
-function Ball(x, y, velX, velY, exists, size, color) {
-    Shape.call(this, x, y, velX, velY, exists);
-    this.size = size;
-    this.color = color;
-}
-
-Ball.prototype = Object.create(Shape.prototype);
-Object.defineProperty(Ball.prototype, 'constuctor', {
-    value: Ball,
-    enumerable: false,
-    writable: true
-});
-
-
-// define ball draw method
-
-Ball.prototype.draw = function () {
-    ctx.beginPath();
-    ctx.fillStyle = this.color;
-    ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-    ctx.fill();
-};
-
-// define ball update method
-
-Ball.prototype.update = function () {
-    if ((this.x + this.size) >= width) {
-        this.x = 20;
+    constructor(x, y, velX, velY, exists, color, size) {
+        super(x, y, velX, velY, exists)
+        this.size = size;
+        this.color = color;
     }
 
-    if ((this.x - this.size) <= 0) {
-        this.x = width - 20;
+    //define ball draw method
+    draw() {
+        ctx.beginPath();
+        ctx.fillStyle = this.color;
+        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        ctx.fill();
     }
 
-    if ((this.y + this.size) >= height) {
-        this.y = 20;
-    }
+    // define ball update method
 
-    if ((this.y - this.size) <= 0) {
-        this.y = height - 20;
-    }
-
-    this.x += this.velX;
-    this.y += this.velY;
-};
-
-// define ball collision detection
-
-var touchAmo = 0;
-
-Ball.prototype.collisionDetect = function () {
-    for (let j = 0; j < balls.length; j++) {
-        if (!(this === balls[j])) {
-            const dx = this.x - balls[j].x;
-            const dy = this.y - balls[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < this.size + balls[j].size) {
-                balls[j].color = this.color = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')';
-                balls[j].size = random(10, 20)
-                touchAmo++
-            }
+    update() {
+        if ((this.x + this.size) >= width) {
+            this.x = 20;
         }
-    }
-};
 
-
-
-function EvilCircle(x, y, velX, velY, exists, size, color, ctrl) {
-    Shape.call(this, x, y, velX, velY, exists)
-    this.size = size;
-    this.color = color;
-    this.ctrl = ctrl;
-
-}
-
-EvilCircle.prototype = Object.create(Shape.prototype);
-Object.defineProperty(EvilCircle.prototype, 'constuctor', {
-    value: EvilCircle,
-    enumerable: false,
-    writable: true
-});
-
-EvilCircle.prototype.draw = function () {
-    ctx.beginPath();
-    lineWidth = 3
-    ctx.strokeStyle = this.color;
-    ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-    ctx.stroke();
-};
-
-EvilCircle.prototype.checkBounds = function () {
-    if ((this.x + this.size) >= width) {
-        this.x = width - 10;
-    }
-
-    if ((this.x - this.size) <= 0) {
-        this.x = 0 + 10;
-    }
-
-    if ((this.y + this.size) >= height) {
-        this.y = height - 10;
-    }
-
-    if ((this.y - this.size) <= 0) {
-        this.y = 0 + 10;
-    }
-}
-
-EvilCircle.prototype.setControls = function (array) {
-    let evilCircle = array[0];
-    let evilCircle2 = array[1]
-    window.onkeypress = function (e) {
-        if (e.key === evilCircle.ctrl[1]) {
-            evilCircle.x -= evilCircle.velX;
-        } if (e.key === evilCircle.ctrl[0]) {
-            evilCircle.x += evilCircle.velX;
-        } if (e.key === evilCircle.ctrl[2]) {
-            evilCircle.y -= evilCircle.velY;
-        } if (e.key === evilCircle.ctrl[3]) {
-            evilCircle.y += evilCircle.velY;
-        } if (e.key === evilCircle2.ctrl[1]) {
-            evilCircle2.x -= evilCircle2.velX;
-        } if (e.key === evilCircle2.ctrl[0]) {
-            evilCircle2.x += evilCircle2.velX;
-        } if (e.key === evilCircle2.ctrl[2]) {
-            evilCircle2.y -= evilCircle2.velY;
-        } if (e.key === evilCircle2.ctrl[3]) {
-            evilCircle2.y += evilCircle2.velY;
+        if ((this.x - this.size) <= 0) {
+            this.x = width - 20;
         }
+
+        if ((this.y + this.size) >= height) {
+            this.y = 20;
+        }
+
+        if ((this.y - this.size) <= 0) {
+            this.y = height - 20;
+        }
+
+        this.x += this.velX;
+        this.y += this.velY;
     }
-}
 
-EvilCircle.prototype.collisionDetect = function () {
-    for (let j = 0; j < balls.length; j++) {
-        if (balls[j].exists) {
-            const dx = this.x - balls[j].x;
-            const dy = this.y - balls[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+    // define ball collision detection
 
-            if (distance < this.size + balls[j].size) {
-                balls[j].exists = false;
-                ballsAmo--
-                if (this === evilCircle) {
-                    killAmo++
-                } else {
-                    killAmo2++
+    collisionDetect() {
+        for (let j = 0; j < balls.length; j++) {
+            if (!(this === balls[j])) {
+                const dx = this.x - balls[j].x;
+                const dy = this.y - balls[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < this.size + balls[j].size) {
+                    balls[j].color = this.color = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')';
+                    balls[j].size = random(10, 20)
+                    touchAmo++
                 }
             }
         }
     }
 }
+
+class EvilCircle extends Shape {
+    constructor(x, y, velX, velY, exists, size, color, ctrl) {
+        super(x, y, velX, velY, exists);
+        this.size = size;
+        this.color = color;
+        this.ctrl = ctrl;
+    }
+
+    draw() {
+        ctx.beginPath();
+        
+        ctx.strokeStyle = this.color;
+        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        ctx.stroke();
+    };
+
+    checkBounds() {
+        if ((this.x + this.size) >= width) {
+            this.x = width - 10;
+        }
+
+        if ((this.x - this.size) <= 0) {
+            this.x = 0 + 10;
+        }
+
+        if ((this.y + this.size) >= height) {
+            this.y = height - 10;
+        }
+
+        if ((this.y - this.size) <= 0) {
+            this.y = 0 + 10;
+        }
+    }
+
+    setControls(array) {
+        let evilCircle = array[0];
+        let evilCircle2 = array[1]
+        window.onkeypress = function (e) {
+            if (e.key === evilCircle.ctrl[1]) {
+                evilCircle.x -= evilCircle.velX;
+            } if (e.key === evilCircle.ctrl[0]) {
+                evilCircle.x += evilCircle.velX;
+            } if (e.key === evilCircle.ctrl[2]) {
+                evilCircle.y -= evilCircle.velY;
+            } if (e.key === evilCircle.ctrl[3]) {
+                evilCircle.y += evilCircle.velY;
+            } if (e.key === evilCircle2.ctrl[1]) {
+                evilCircle2.x -= evilCircle2.velX;
+            } if (e.key === evilCircle2.ctrl[0]) {
+                evilCircle2.x += evilCircle2.velX;
+            } if (e.key === evilCircle2.ctrl[2]) {
+                evilCircle2.y -= evilCircle2.velY;
+            } if (e.key === evilCircle2.ctrl[3]) {
+                evilCircle2.y += evilCircle2.velY;
+            }
+        }
+    }
+
+    collisionDetect() {
+        for (let j = 0; j < balls.length; j++) {
+            if (balls[j].exists) {
+                const dx = this.x - balls[j].x;
+                const dy = this.y - balls[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < this.size + balls[j].size) {
+                    balls[j].exists = false;
+                    ballsAmo--
+                    if (this === evilCircle) {
+                        killAmo++
+                    } else {
+                        killAmo2++
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 // define array to store balls and populate it
 
@@ -230,6 +211,7 @@ arr = [evilCircle, evilCircle2]
 evilCircle2.setControls(arr);
 evilCircle.setControls(arr);
 
+var touchAmo = 0;
 var ballsAmo = balls.length;
 var killAmo = 0;
 var killAmo2 = 0;
