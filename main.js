@@ -91,14 +91,12 @@ Ball.prototype.collisionDetect = function () {
 
 
 
-function EvilCircle(x, y, velX, velY, exists, size, color, posX, negX, posY, negY) {
+function EvilCircle(x, y, velX, velY, exists, size, color, ctrl) {
     Shape.call(this, x, y, velX, velY, exists)
     this.size = size;
     this.color = color;
-    this.posX = posX;
-    this.negX = negX;
-    this.posY = posY;
-    this.negY = negY;
+    this.ctrl = ctrl;
+
 }
 
 EvilCircle.prototype = Object.create(Shape.prototype);
@@ -134,17 +132,26 @@ EvilCircle.prototype.checkBounds = function () {
     }
 }
 
-EvilCircle.prototype.setControls = function () {
-    let _this = this;
-    window.onkeypress = function (e, posX, posY, negX, negY) {
-        if (e.key === _this.negX) {
-            _this.x -= _this.velX;
-        } if (e.key === _this.posX) {
-            _this.x += _this.velX;
-        } if (e.key === _this.posY) {
-            _this.y -= _this.velY;
-        } if (e.key === _this.negY) {
-            _this.y += _this.velY;
+EvilCircle.prototype.setControls = function (array) {
+    let evilCircle = array[0];
+    let evilCircle2 = array[1]
+    window.onkeypress = function (e) {
+        if (e.key === evilCircle.ctrl[1]) {
+            evilCircle.x -= evilCircle.velX;
+        } if (e.key === evilCircle.ctrl[0]) {
+            evilCircle.x += evilCircle.velX;
+        } if (e.key === evilCircle.ctrl[2]) {
+            evilCircle.y -= evilCircle.velY;
+        } if (e.key === evilCircle.ctrl[3]) {
+            evilCircle.y += evilCircle.velY;
+        } if (e.key === evilCircle2.ctrl[1]) {
+            evilCircle2.x -= evilCircle2.velX;
+        } if (e.key === evilCircle2.ctrl[0]) {
+            evilCircle2.x += evilCircle2.velX;
+        } if (e.key === evilCircle2.ctrl[2]) {
+            evilCircle2.y -= evilCircle2.velY;
+        } if (e.key === evilCircle2.ctrl[3]) {
+            evilCircle2.y += evilCircle2.velY;
         }
     }
 }
@@ -159,40 +166,15 @@ EvilCircle.prototype.collisionDetect = function () {
             if (distance < this.size + balls[j].size) {
                 balls[j].exists = false;
                 ballsAmo--
+                if (this === evilCircle) {
+                    killAmo++
+                } else {
+                    killAmo2++
+                }
             }
         }
     }
 }
-
-function EvilCircle2(x, y, velX, velY, exists, size, color) {
-    EvilCircle.call(this, x, y, velX, velY, exists)
-    this.size = size;
-    this.color = color;
-}
-
-EvilCircle2.prototype = Object.create(EvilCircle.prototype);
-Object.defineProperty(EvilCircle2.prototype, 'constuctor', {
-    value: EvilCircle2,
-    enumerable: false,
-    writable: true
-});
-
-EvilCircle2.prototype.setControls2 = function () {
-    let _this = this;
-    window.onkeypress = function (f) {
-        if (f.key === negX) {
-            _this.x -= _this.velX;
-        } if (f.key === posX) {
-            _this.x += _this.velX;
-        } if (f.key === posY) {
-            _this.y -= _this.velY;
-        } if (f.key === negY) {
-            _this.y += _this.velY;
-        }
-    }
-}
-
-
 
 // define array to store balls and populate it
 
@@ -223,13 +205,9 @@ let evilCircle = new EvilCircle(
     20,
     exists = true,
     10,
-    'white',
-    'd',
-    'a',
-    'w',
-    's'
+    'green',
+    ['d', 'a', 'w', 's']
 )
-evilCircle.setControls();
 
 let evilCircle2 = new EvilCircle(
     80,
@@ -238,17 +216,21 @@ let evilCircle2 = new EvilCircle(
     20,
     exists = true,
     10,
-    'white',
-    'l',
-    'j',
-    'i',
-    'k'
+    'blue',
+    ['l', 'j', 'i', 'k']
 )
-// evilCircle2.setControls();
+
+arr = [evilCircle, evilCircle2]
+evilCircle2.setControls(arr);
+evilCircle.setControls(arr);
 
 var ballsAmo = balls.length;
+var killAmo = 0;
+var killAmo2 = 0;
 var counter = document.getElementById("counter");
 var touchCounter = document.getElementById("touchCounter");
+var player1 = document.getElementById('player1');
+var player2 = document.getElementById('player2');
 
 function loop() {
     ctx.fillStyle = 'rgba(0,0,0,0.25)';
@@ -272,6 +254,9 @@ function loop() {
 
     counter.innerHTML = 'Balls left: ' + ballsAmo;
     touchCounter.innerHTML = 'Touch Amount: ' + touchAmo
+    player1.innerHTML = 'Player 1 Score: ' + killAmo
+    player2.innerHTML = 'Player 2 Score: ' + killAmo2
+
 
     requestAnimationFrame(loop);
 }

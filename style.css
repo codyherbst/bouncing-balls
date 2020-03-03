@@ -35,7 +35,23 @@ html, body {
   #touchCounter {
     position: absolute;
     margin: 0;
-    top: 75px;
+    top: 60px;
     right: 5px;
     color: #aaa;
   }
+
+#player1 {
+  position: absolute;
+  margin: 0;
+  top: 85px;
+  right: 5px;
+  color: #aaa;
+}
+
+#player2 {
+  position: absolute;
+  margin: 0;
+  top: 110px;
+  right: 5px;
+  color: #aaa;
+}
