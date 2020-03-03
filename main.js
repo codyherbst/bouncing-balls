@@ -41,7 +41,6 @@ class Ball extends Shape {
     }
 
     // define ball update method
-
     update() {
         if ((this.x + this.size) >= width) {
             this.x = 20;
@@ -64,7 +63,6 @@ class Ball extends Shape {
     }
 
     // define ball collision detection
-
     collisionDetect() {
         for (let j = 0; j < balls.length; j++) {
             if (!(this === balls[j])) {
@@ -92,7 +90,7 @@ class EvilCircle extends Shape {
 
     draw() {
         ctx.beginPath();
-        
+
         ctx.strokeStyle = this.color;
         ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
         ctx.stroke();
@@ -177,12 +175,12 @@ while (balls.length < 25) {
         random(-7, 7),
         random(-7, 7),
         exists = true,
-        size,
         'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
+        size,
     );
     balls.push(ball);
 }
-
+console.log(balls)
 // define loop that keeps drawing the scene constantly
 
 let evilCircle = new EvilCircle(
@@ -221,10 +219,12 @@ var player1 = document.getElementById('player1');
 var player2 = document.getElementById('player2');
 
 function loop() {
+
     ctx.fillStyle = 'rgba(0,0,0,0.25)';
     ctx.fillRect(0, 0, width, height);
 
     for (let i = 0; i < balls.length; i++) {
+
         if (balls[i].exists) {
             balls[i].draw();
             balls[i].update();
